@@ -2,7 +2,18 @@ import React from 'react'
 import { useState } from 'react'
 import './Auth.css'
 import chat from '../../assets/icons8-chat-96.png' 
+
+
+import { useDispatch } from 'react-redux'
+import { signin } from '../../actions/auth'
+import { signups } from '../../actions/auth'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 const Auth = () => {
+  const navigate=useNavigate();
+  const dispatch=useDispatch();
+  const location=useLocation();
   const [login,setLogin]=useState(true);
   const toggle=(e)=>{
     setLogin(!login);
@@ -19,6 +30,16 @@ const Auth = () => {
     console.log(email);
     console.log(password);
     console.log(confirmPassword);
+    const formData={};
+    formData.name=name;
+    formData.email=email;
+    formData.password=password;
+    formData.confirmPassword=confirmPassword;
+    if(login===true){
+      dispatch(signin(formData,navigate));
+    }else{
+      dispatch(signups(formData,navigate));
+    }
 
   }
   return (

@@ -7,5 +7,5 @@ const userModel=mongoose.Schema({
 },{
     timestamps:true
 });
-const User=mongoose.model("User",User);
+const User=mongoose.model("User",userModel);
 module.exports=User
