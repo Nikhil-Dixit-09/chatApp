@@ -41,3 +41,48 @@ module.exports.signup = async function (req, res) {
         console.log(err);
     }
 }
+module.exports.getUsers=async function(req,res){
+    try{
+        let keyword=req.params.keyword;
+        console.log(keyword);
+        const users=await User.find({name:{$regex: keyword,$options:'i'}});
+        const users2=await User.find({email:{$regex: keyword,$options:'i'}});
+        // console.log(users,users2);
+        let unique=new Map();
+        let id=new Map();
+        console.log(req.userId);
+        for(let i=0;i<users.length;i++){
+            let str=users[i]._id.toString();
+            console.log(str);
+            if(str===req.userId){
+
+            }else if(id.has(str)){
+
+            }else{
+                id.set(str,1);
+                unique.set(users[i],1);
+            }
+        }
+        for(let i=0;i<users2.length;i++){
+            let str=users2[i]._id.toString();
+            console.log(str);
+            if(str===req.userId){
+
+            }else if(id.has(str)){
+
+            }else{
+                id.set(str,1);
+                unique.set(users2[i],1);
+            }
+        }
+        console.log(id);
+        var union = [];
+        for (let key of unique.keys()) {
+            union.push(key);
+        }
+        // console.log(union);
+        return res.status(200).json({data:union});
+    }catch(err){
+        console.log(err);
+    }
+}
