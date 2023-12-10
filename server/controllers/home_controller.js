@@ -47,7 +47,6 @@ module.exports.getUsers=async function(req,res){
         console.log(keyword);
         const users=await User.find({name:{$regex: keyword,$options:'i'}});
         const users2=await User.find({email:{$regex: keyword,$options:'i'}});
-        // console.log(users,users2);
         let unique=new Map();
         let id=new Map();
         console.log(req.userId);
