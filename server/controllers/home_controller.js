@@ -49,7 +49,7 @@ module.exports.getUsers=async function(req,res){
         const users2=await User.find({email:{$regex: keyword,$options:'i'}});
         let unique=new Map();
         let id=new Map();
-        console.log(req.userId);
+        console.log(req.userId,'hiiiiiiii');
         for(let i=0;i<users.length;i++){
             let str=users[i]._id.toString();
             console.log(str);

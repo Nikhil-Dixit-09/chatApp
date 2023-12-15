@@ -11,3 +11,7 @@ API.interceptors.request.use((req)=>{
 export const signin=(formData)=>API.post(`/user/signin`,formData);
 export const signup=(formData)=>API.post(`/user/signup`,formData);
 export const verify=(formData)=>API.post('/user/verify',formData);
+export const getUsers=(keyword)=>API.get(`/user/getUsers/${keyword}`);
+export const accessChat=(formData)=>API.post('/chat/accessChat',formData);
+export const fetchChat=()=>API.get('/chat/fetchChat');
+export const createGroupChat=(formData)=>API.post('/chat/createGroupChat',formData);

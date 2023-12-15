@@ -1,0 +1,27 @@
+.createGroup{
+    text-align: center;
+}
+.showUsers{
+    height: 40vh;
+    overflow-y: auto;
+}
+.addedMember{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.addedMemberName{
+    margin-right: 10px;
+}
+.delMember{
+    cursor: pointer;
+}
+.chatName{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+.chatNameLabel{
+    margin-right: 10px;
+}

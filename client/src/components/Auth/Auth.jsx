@@ -41,6 +41,9 @@ const Auth = () => {
   const notify6 = () => toast('Passwords did not match', {
     type: 'error',
   });
+  const notify8 = () => toast('Successfully signed out', {
+    type: 'success',
+  });
  
   useEffect(()=>{
     if(notification===1){
@@ -57,6 +60,9 @@ const Auth = () => {
       dispatch({type:'RESET',which:0});
     }else if(notification===6){
       notify6();
+      dispatch({type:'RESET',which:0});
+    }else if(notification===8){
+      notify8();
       dispatch({type:'RESET',which:0});
     }
     

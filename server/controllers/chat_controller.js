@@ -16,6 +16,7 @@ module.exports.fetchChat=async function(req,res){
 module.exports.accessChat=async function(req,res){
     try{    
         const userId=req.body.userId;
+        console.log(userId);
         if(!userId){
             return res.status(400);
         }
@@ -53,6 +54,7 @@ module.exports.accessChat=async function(req,res){
 }
 module.exports.createGroupChat=async function(req,res){
     try{
+        console.log(req.body.users);
         if(!req.body.users||!req.body.name){
             return res.status(200).json({data:"Please fill all the fields"});
         }
@@ -117,7 +119,6 @@ module.exports.addGroupChat=async function(req,res){
             chat.users.push(addId);
         }
         chat.save();
-        
         const chat2=await Chat.findOne({_id:chatId}).populate("users","-password").populate("groupAdmin","-password");
         if(f==1){
             return res.status(200).json({data:"User already present in the group"});
