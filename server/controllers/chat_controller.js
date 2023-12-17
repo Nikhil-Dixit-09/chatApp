@@ -1,6 +1,7 @@
 const { use } = require('bcrypt/promises');
 const Chat=require('../models/chat');
 const User=require('../models/user');
+const Message=require('../models/message');
 module.exports.fetchChat=async function(req,res){
     try{
         var chats=await Chat.find({users:{$elemMatch:{$eq:req.userId}}}).populate("users","-password").populate("latestMessage").populate("groupAdmin","-password").sort({updatedAt:-1});
@@ -126,6 +127,47 @@ module.exports.addGroupChat=async function(req,res){
             return res.status(200).json({data:chat2});
         }
         
+    }catch(err){
+        console.log(err);
+    }
+}
+module.exports.sendMessage=async function(req,res){
+    try{
+        const content=req.body.content;
+        const chatId=req.body.chatId;
+        if(!content||!chatId){
+            return res.status(200).json({data:"Please give content and chatId"});
+        }
+        var newMessage={
+            sender:req.userId,
+            content:content,
+            chat:chatId
+        };
+        var message=await Message.create(newMessage);
+        message=await message.populate("sender","name pic email");
+        
+        message=await User.populate(message,{
+            path:"chat.users",
+            select:"name pic email"
+        });
+        await Chat.findByIdAndUpdate(chatId,{
+            latestMessage:message
+        });
+        message=await message.populate("chat");
+        message=await Message.populate(message,{
+            path:"chat.latestMessage",
+            select:"sender content chat"
+        });
+        return res.status(200).json({data:message});
+    }catch(err){
+        console.log(err);
+    }
+}
+module.exports.getMessages=async function(req,res){
+    try{
+        const chatId=req.params.chatId;
+        const messages=await Message.find({chat:chatId}).populate("sender","name email").populate("chat");
+        return res.status(200).json({data:messages});
     }catch(err){
         console.log(err);
     }

@@ -15,3 +15,5 @@ export const getUsers=(keyword)=>API.get(`/user/getUsers/${keyword}`);
 export const accessChat=(formData)=>API.post('/chat/accessChat',formData);
 export const fetchChat=()=>API.get('/chat/fetchChat');
 export const createGroupChat=(formData)=>API.post('/chat/createGroupChat',formData);
+export const sendMessage=(formData)=>API.post('/chat/sendMessage',formData);
+export const getMessages=(chatId)=>API.get(`/chat/getMessages/${chatId}`);

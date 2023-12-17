@@ -16,6 +16,8 @@ import { fetchChat } from '../../actions/chat';
 import Mychat from '../Mychat/Mychat';
 import plus from '../../assets/icons8-plus-40.png'
 import Group from '../Group/Group';
+import { sendMessage } from '../../actions/chat';
+import { getMessages } from '../../actions/chat';
 const customStyles = {
   content: {
     top: '0%',
@@ -43,16 +45,27 @@ const Home = () => {
   console.log(notification);
   console.log(user);
   const [search, setS] = useState("");
+  const [message, setMessage] = useState("");
+  const chat = useSelector(state => state.chat);
+  console.log(chat);
+  useEffect(() => {
+    setMessage("");
+    if (chat !== "") {
+      dispatch(getMessages(chat));
+    }
+  }, [chat]);
   const [showSearch, setSearch] = useState(0);
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const userList = useSelector(state => state.userList);
-  const chatList=useSelector(state=>state.chatList);
+  const chatList = useSelector(state => state.chatList);
+  const messageList = useSelector(state => state.messageList);
+  console.log(messageList);
   console.log(chatList);
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(fetchChat());
-  },[user]);
+  }, [user]);
   console.log(userList);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setS(e.target.value);
   }
@@ -71,8 +84,8 @@ const Home = () => {
     } else {
       dispatch({ type: 'RESET_USER_LIST' });
     }
-
   }, [search]);
+
   const dispatch = useDispatch();
   const notify4 = () => toast('Successfully signed in', {
     type: 'success',
@@ -83,14 +96,30 @@ const Home = () => {
   const notify9 = () => toast('Added chat successfully', {
     type: 'success',
   });
+  const notify10 = () => toast('Please fill all the fields', {
+    type: 'error',
+  });
+  const notify11 = () => toast('Please add more than 1 users', {
+    type: 'error',
+  });
+  const notify12 = () => toast('Group chat created successfully', {
+    type: 'success',
+  });
   useEffect(() => {
     console.log(notification);
     if (notification === 4) {
       notify4();
     } else if (notification === 7) {
       notify7();
-    }else if(notification===9){
+    } else if (notification === 9) {
       notify9();
+      dispatch(fetchChat());
+    } else if (notification === 10) {
+      notify10();
+    } else if (notification === 11) {
+      notify11();
+    } else if (notification === 12) {
+      notify12();
       dispatch(fetchChat());
     }
     dispatch({ type: 'RESET', which: 0 });
@@ -98,9 +127,9 @@ const Home = () => {
   const handleClickSearch = (e) => {
     setSearch(1);
   }
-  const logout=(e)=>{
-    dispatch({type:'LOGOUT'});
-    dispatch({type:'CHANGE_NOTI',which:8});
+  const logout = (e) => {
+    dispatch({ type: 'LOGOUT' });
+    dispatch({ type: 'CHANGE_NOTI', which: 8 });
     navigate('/auth');
   }
 
@@ -112,6 +141,20 @@ const Home = () => {
   }
   function closeModal2() {
     setIsOpen2(false);
+  }
+  const handleTyping = (e) => {
+    setMessage(e.target.value);
+  }
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (message.length !== 0 && chat !== "") {
+      console.log('hii', chat, message);
+      let formData = {};
+      formData.content = message;
+      formData.chatId = chat;
+      dispatch(sendMessage(formData));
+      setMessage("");
+    }
   }
 
 
@@ -170,7 +213,7 @@ const Home = () => {
         <div className='right' >
           <button className='logout' onClick={logout}>Logout</button>
           {user?.result?.name}
-          
+
         </div>
       </div>
 
@@ -183,30 +226,30 @@ const Home = () => {
             </div>
             <div className='newChatGroup' onClick={openModal2}>
               <div className='padding'>
-              New Group Chat
+                New Group Chat
               </div>
               <div>
-              <img src={plus} alt="" />
+                <img src={plus} alt="" />
               </div>
-              
+
             </div>
             <Modal
-        isOpen={modalIsOpen2}
-        onRequestClose={closeModal2}
-        style={customStyles2}
-        contentLabel="Example Modal"
-      >
-        <Group/>
-      </Modal>
+              isOpen={modalIsOpen2}
+              onRequestClose={closeModal2}
+              style={customStyles2}
+              contentLabel="Example Modal"
+            >
+              <Group />
+            </Modal>
           </div>
 
 
           <div>
-          {
-                    chatList.map(function (chat, index) {
-                      return <Mychat chat={chat} />;
-                    })
-                  }
+            {
+              chatList.map(function (chat, index) {
+                return <Mychat chat={chat} />;
+              })
+            }
           </div>
 
 
@@ -215,6 +258,68 @@ const Home = () => {
 
 
         <div className='chatWindow'>
+          <div className='msger-chat'>
+            {
+              chat !== "" &&
+              <div>
+                {
+                  messageList.map(function (message, index) {
+                    return <div>
+                      {
+                        message?.sender?.email !== user?.result?.email &&
+                        <div className='lefty'>
+                          <div className='message'>
+                          <div className='senderName'>
+                            {message?.sender?.name}
+                          </div>
+                          <div className='messageContent'>
+                            {message?.content}
+                          </div>
+                        </div>
+                        </div>
+                        
+                       
+                        
+                      }
+                      {
+                        message?.sender?.email === user?.result?.email &&
+                        <div className='righty'>
+                          <div className='message'>
+                          <div className='senderName'>
+                            {message?.sender?.name}
+                          </div>
+                          <div className='messageContent'>
+                            {message?.content}
+                          </div>
+                        </div>
+                        </div>
+                        
+                     
+                      }
+
+
+
+                    </div>;
+                  })
+                }
+              </div>
+            }
+            {
+              chat === "" &&
+              <div>
+                Click on a chat to start talking
+              </div>
+            }
+          </div>
+          <div>
+            {
+              chat !== "" &&
+              <form className='msger-inputarea' onSubmit={handleSendMessage}>
+                <input onChange={handleTyping} value={message} className='msger-input' type="text" placeholder='Enter a message..' />
+                <button type='submit' className='msger-send-btn'>Send</button>
+              </form>
+            }
+          </div>
 
         </div>
 

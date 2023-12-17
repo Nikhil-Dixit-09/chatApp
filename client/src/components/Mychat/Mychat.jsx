@@ -1,6 +1,8 @@
 import React from 'react'
 import './Mychat.css'
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+
 const Mychat = (chat) => {
     console.log(chat);
     let chatuser, email;
@@ -12,11 +14,15 @@ const Mychat = (chat) => {
         chatuser = chat.chat.users[0].name;
         email = chat.chat.users[0].email;
     }
+    const dispatch=useDispatch();
+    const handleClick=(e)=>{
+        dispatch({type:'SET_CUR_CHAT',chat:chat.chat._id});
+    }
     return (
         <div>
             {
                 chat.chat.isGroupChat === false &&
-                <div className='userSearch'>
+                <div className='userSearch' onClick={handleClick}>
                     <div>
                         {chatuser}
                     </div>
@@ -27,7 +33,7 @@ const Mychat = (chat) => {
             }
             {
                 chat.chat.isGroupChat === true &&
-                <div className='userSearch'>
+                <div className='userSearch' onClick={handleClick}>
                     {chat.chat.chatname}
                 </div>
             }

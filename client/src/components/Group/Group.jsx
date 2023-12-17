@@ -6,7 +6,10 @@ import { getUserList } from '../../actions/user';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { createGroupChat } from '../../actions/chat';
-import del from '../../assets/icons8-denied-25.png'
+import del from '../../assets/icons8-denied-25.png';
+
+import { fetchChat } from '../../actions/chat';
+
 const Group = () => {
     const [search, setSearch] = useState("");
     const [name,setName]=useState("");
@@ -131,7 +134,6 @@ const Group = () => {
             <div>
                 <button onClick={createGroup}>Create the Group</button>
             </div>
-
         </div>
     )
 }

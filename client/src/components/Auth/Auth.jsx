@@ -83,11 +83,9 @@ const Auth = () => {
     } else {
       dispatch(signups(formData, navigate));
     }
-
   }
-
   const handleClick = () => {
-    console.log('hiii')
+    console.log('hiii');
     notify1();
   }
   return (

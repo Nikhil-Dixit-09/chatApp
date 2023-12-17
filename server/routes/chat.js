@@ -8,4 +8,9 @@ router.post('/createGroupChat',auth,chatController.createGroupChat);
 router.put('/renameGroupChat',auth,chatController.renameGroupChat);
 router.put('/removeGroupChat',auth,chatController.removeFromGroupChat);
 router.put('/addGroupChat',auth,chatController.addGroupChat);
+
+router.post('/sendMessage',auth,chatController.sendMessage);
+router.get('/getMessages/:chatId',auth,chatController.getMessages);
+
+
 module.exports=router;
