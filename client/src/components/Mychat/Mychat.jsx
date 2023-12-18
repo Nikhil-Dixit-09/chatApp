@@ -17,6 +17,17 @@ const Mychat = (chat) => {
     const dispatch=useDispatch();
     const handleClick=(e)=>{
         dispatch({type:'SET_CUR_CHAT',chat:chat.chat._id});
+        if(chat.chat.isGroupChat===false){
+            dispatch({type:'RESET_GROUP_MEMBERS'});
+            if(user?.result?._id!==chat.chat.users[0]._id){
+                dispatch({type:'SET_CHAT_HEADER',chat:chat.chat.users[0].name});
+            }else{
+                dispatch({type:'SET_CHAT_HEADER',chat:chat.chat.users[1].name});
+            }
+        }else{
+            dispatch({type:'SET_CHAT_HEADER',chat:chat.chat.chatname});
+            dispatch({type:'SET_GROUP_MEMBERS',data:chat.chat.users});
+        }
     }
     return (
         <div>

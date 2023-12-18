@@ -18,6 +18,8 @@ import plus from '../../assets/icons8-plus-40.png'
 import Group from '../Group/Group';
 import { sendMessage } from '../../actions/chat';
 import { getMessages } from '../../actions/chat';
+import eye from '../../assets/icons8-eye-50.png'
+import { useRef } from 'react';
 const customStyles = {
   content: {
     top: '0%',
@@ -36,10 +38,20 @@ const customStyles2 = {
     transform: 'translate(-50%, -50%)',
   },
 };
+const customStyles3 = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
 Modal.setAppElement('#root');
 
 const Home = () => {
-
+  const ref=useRef(null);
   const notification = useSelector(state => state.notification);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   console.log(notification);
@@ -59,6 +71,9 @@ const Home = () => {
   const userList = useSelector(state => state.userList);
   const chatList = useSelector(state => state.chatList);
   const messageList = useSelector(state => state.messageList);
+  const chatHeader = useSelector(state => state.chatHeader);
+  const groupMembers = useSelector(state => state.groupMembers);
+  console.log(groupMembers);
   console.log(messageList);
   console.log(chatList);
   useEffect(() => {
@@ -141,6 +156,16 @@ const Home = () => {
   }
   function closeModal2() {
     setIsOpen2(false);
+  }
+
+  const [modalIsOpen3, setIsOpen3] = React.useState(false);
+
+  function openModal3() {
+    setIsOpen3(true);
+  }
+
+  function closeModal3() {
+    setIsOpen3(false);
   }
   const handleTyping = (e) => {
     setMessage(e.target.value);
@@ -258,6 +283,54 @@ const Home = () => {
 
 
         <div className='chatWindow'>
+          <div className='chatHeader'>
+            {
+              chat !== "" &&
+              <div className='chatName'>
+                {chatHeader}
+              </div>
+            }
+            {
+              (chat !== "" && groupMembers.length !== 0) &&
+              <div className='chatGroupMembers' onClick={openModal3}>
+                <img src={eye} alt="" />
+              </div>
+
+            }
+            <Modal
+              isOpen={modalIsOpen3}
+              onRequestClose={closeModal3}
+              style={customStyles3}
+              contentLabel="Example Modal"
+            >
+              <div className='groupMembersHeading'>
+                Group Members:
+              </div>
+              {
+                
+               groupMembers.map(function (member, index) {
+                return <div className='GroupMembersList'>
+                  
+                  {
+                    member._id===user?.result?._id &&
+                    <div className='groupMember'>
+                      You
+                    </div>
+                  }
+                  {
+                    member._id!==user?.result?._id &&
+                    <div className='groupMember'>
+                      {member.name}
+                    </div>
+                  } 
+                  {
+
+                  }
+                </div>;
+              })
+              }
+            </Modal>
+          </div>
           <div className='msger-chat'>
             {
               chat !== "" &&
@@ -269,32 +342,32 @@ const Home = () => {
                         message?.sender?.email !== user?.result?.email &&
                         <div className='lefty'>
                           <div className='message'>
-                          <div className='senderName'>
-                            {message?.sender?.name}
-                          </div>
-                          <div className='messageContent'>
-                            {message?.content}
+                            <div className='senderName'>
+                              {message?.sender?.name}
+                            </div>
+                            <div className='messageContent'>
+                              {message?.content}
+                            </div>
                           </div>
                         </div>
-                        </div>
-                        
-                       
-                        
+
+
+
                       }
                       {
                         message?.sender?.email === user?.result?.email &&
                         <div className='righty'>
                           <div className='message'>
-                          <div className='senderName'>
-                            {message?.sender?.name}
-                          </div>
-                          <div className='messageContent'>
-                            {message?.content}
+                            <div className='senderName'>
+                              You
+                            </div>
+                            <div className='messageContent'>
+                              {message?.content}
+                            </div>
                           </div>
                         </div>
-                        </div>
-                        
-                     
+
+
                       }
 
 

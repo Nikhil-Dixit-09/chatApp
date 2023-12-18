@@ -148,5 +148,35 @@
   .righty .message {
     background-color: #d4e6f1; 
   }
+.chatHeader{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    /* background-color: #3498db;  */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+.chatName{
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px;
+}
 
-  
+.chatGroupMembers{
+    cursor: pointer;
+    margin-left: 10px;
+}
+.GroupMembersList{
+    display: flex;
+    flex-direction: column;
+
+}
+.groupMember{
+    margin-bottom: 10px;
+    font-family: cursive;
+}
+.groupMembersHeading{
+    margin-bottom: 10px;
+    font-size: large;
+    font-weight: 600;
+}
