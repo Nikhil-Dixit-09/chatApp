@@ -30,22 +30,25 @@ const Mychat = (chat) => {
         }
     }
     return (
-        <div>
+        <div className='myChatShow'>
             {
                 chat.chat.isGroupChat === false &&
-                <div className='userSearch' onClick={handleClick}>
-                    <div>
+                <div className='neww' onClick={handleClick}>
+                    <div className='chatNameU'>
                         {chatuser}
                     </div>
-                    <div>
+                    <div className='chatEmail'>
                         {email}
                     </div>
                 </div>
             }
             {
                 chat.chat.isGroupChat === true &&
-                <div className='userSearch' onClick={handleClick}>
+                <div className='neww' onClick={handleClick}>
+                    <div className='chatGroup'>
                     {chat.chat.chatname}
+                    </div>
+                    
                 </div>
             }
         </div>

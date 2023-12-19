@@ -1,0 +1,36 @@
+.myChatShow {
+    background-color: none; 
+    border: 1px solid #689F38; 
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .myChatShow:hover {
+    background-color: #4CAF50; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+  }
+  
+  .neww {
+    padding: 10px;
+  }
+  
+  .chatNameU, .chatGroup {
+    font-size: 18px;
+    font-weight: bold;
+    color: black; 
+  }
+  
+  .chatEmail {
+    font-size: 14px;
+    color: black; 
+  }
+  
+  .chatGroup {
+    font-style: italic;
+    color: black; 
+  }
+  

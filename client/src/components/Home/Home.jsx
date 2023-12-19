@@ -51,7 +51,8 @@ const customStyles3 = {
 Modal.setAppElement('#root');
 
 const Home = () => {
-  const ref=useRef(null);
+  const messagesEndRef = useRef(null);
+ 
   const notification = useSelector(state => state.notification);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   console.log(notification);
@@ -74,8 +75,12 @@ const Home = () => {
   const chatHeader = useSelector(state => state.chatHeader);
   const groupMembers = useSelector(state => state.groupMembers);
   console.log(groupMembers);
+
   console.log(messageList);
   console.log(chatList);
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messageList]);
   useEffect(() => {
     dispatch(fetchChat());
   }, [user]);
@@ -84,6 +89,8 @@ const Home = () => {
   const handleChange = (e) => {
     setS(e.target.value);
   }
+ 
+  
   function openModal() {
     setIsOpen(true);
   }
@@ -236,8 +243,14 @@ const Home = () => {
         </div>
 
         <div className='right' >
-          <button className='logout' onClick={logout}>Logout</button>
+          <div>
+          <button  className='logout' onClick={logout}>Logout</button>
+          </div>
+          <div>
           {user?.result?.name}
+          </div>
+          
+          
 
         </div>
       </div>
@@ -246,14 +259,14 @@ const Home = () => {
         <div className='left'>
 
           <div className='bodyFooter'>
-            <div>
+            <div className='myChatsText'>
               My Chats
             </div>
             <div className='newChatGroup' onClick={openModal2}>
               <div className='padding'>
                 New Group Chat
               </div>
-              <div>
+              <div className='plusIcon'>
                 <img src={plus} alt="" />
               </div>
 
@@ -269,7 +282,7 @@ const Home = () => {
           </div>
 
 
-          <div>
+          <div className='scrollIt'>
             {
               chatList.map(function (chat, index) {
                 return <Mychat chat={chat} />;
@@ -331,16 +344,16 @@ const Home = () => {
               }
             </Modal>
           </div>
-          <div className='msger-chat'>
+          <div className='msger-chat' id='scroll' >
             {
               chat !== "" &&
               <div>
                 {
                   messageList.map(function (message, index) {
-                    return <div>
+                    return <div ref={messagesEndRef}>
                       {
                         message?.sender?.email !== user?.result?.email &&
-                        <div className='lefty'>
+                        <div className='lefty' >
                           <div className='message'>
                             <div className='senderName'>
                               {message?.sender?.name}
