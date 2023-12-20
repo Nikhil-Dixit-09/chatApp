@@ -11,6 +11,7 @@ import chat from './chat2'
 import messageList from './messageList'
 import chatHeader from './chatHeader'
 import groupMembers from './groupMembers'
+import message from './message'
 export default combineReducers({
-    user,auth,notification,userList,chatList,chat,messageList,chatHeader,groupMembers
+    user,auth,notification,userList,chatList,chat,messageList,chatHeader,groupMembers,message
 });

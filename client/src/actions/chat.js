@@ -36,6 +36,7 @@ export const sendMessage=(formData)=>async(dispatch)=>{
     try{
         const {data}=await api.sendMessage(formData);
         console.log(data);
+        dispatch({type:'SET_MESSAGE',data:data.data});
         dispatch({type:'APPEND_MESSAGE_LIST',data:data});
     }catch(err){
         console.log(err);

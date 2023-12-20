@@ -12,10 +12,50 @@ app.use(cors());
 app.use('/',router);
 
 const db=require('./config/mongoose');
+const { use } = require('bcrypt/promises.js');
 console.log('hi');
-app.listen(port,function(err){
+const server=app.listen(port,function(err){
     if(err){
         console.log('Error: ',err);
     }
     console.log('server is up and running on port ',port);
+});
+const io=require('socket.io')(server,{
+    pingTimeout:60000,
+    cors:{
+        origin:"http://localhost:3000"
+    }
+});
+io.on("connection",(socket)=>{
+    console.log("connected to socket.io",socket.id);
+    socket.on("setup",(userData)=>{
+        console.log(userData?.name,": ",userData?._id);
+        socket.emit('connected');
+
+    });
+    socket.on("join rooms",(chatList)=>{
+        console.log(chatList);
+        for(let i=0;i<chatList.length;i++){
+            socket.join(chatList[i]._id);
+        }
+    });
+    socket.on("new message",(newMessage)=>{
+        // console.log(newMessage,'hiii');
+        // io.emit("message recieved",newMessage);
+        var chat=newMessage?.chat;
+        // console.log(chat,newMessage);
+        if(!newMessage?.chat?.users){
+            console.log('chat.users is undefined');
+            return;
+        }else{
+            io.to(chat._id).emit("message recieved", newMessage);
+        }
+        
+    });
+    socket.on('disconnect', () => {
+        console.log('User disconnected:', socket.id);
+      });
+
 })
+
+

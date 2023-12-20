@@ -20,6 +20,9 @@ import { sendMessage } from '../../actions/chat';
 import { getMessages } from '../../actions/chat';
 import eye from '../../assets/icons8-eye-50.png'
 import { useRef } from 'react';
+import io from 'socket.io-client'
+const ENDPOINT="http://localhost:8000";
+var socket,selectedChatCompare;
 const customStyles = {
   content: {
     top: '0%',
@@ -55,6 +58,9 @@ const Home = () => {
  
   const notification = useSelector(state => state.notification);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+  const [socketConnected,setSocketConnected]=useState(false);
+  const socketMessage=useSelector(state=>state.message);
+  console.log(socketMessage);
   console.log(notification);
   console.log(user);
   const [search, setS] = useState("");
@@ -188,8 +194,40 @@ const Home = () => {
       setMessage("");
     }
   }
+  
+  useEffect(()=>{
+    socket=io(ENDPOINT);
+    socket.emit("setup",user?.result);
+    socket.on("connection",()=>setSocketConnected(true));
+  },[]);
 
+  useEffect(()=>{
+    console.log(socketMessage?.chat);
+    console.log(socketMessage);
+    if(socketMessage.chat!==undefined){
+      socket.emit("new message",socketMessage);
+      dispatch({type:'RESET_MESSAGE'});
+    }
+    
+  },[socketMessage]);
+  useEffect(()=>{
+    console.log('log me');
+    socket.on("message recieved",(newMessage)=>{
+      if(newMessage.sender._id===user?.result?._id){
 
+      }else if(newMessage?.chat?._id===chat){
+        let data={};
+        data.data=newMessage;
+        console.log(newMessage);
+        dispatch({type:'APPEND_MESSAGE_LIST',data:data});
+      }else{
+
+      }
+    })
+  });
+  useEffect(()=>{
+    socket.emit("join rooms",chatList);
+  },[chatList]);
   return (
     <div className='home'>
       <div className='myDiv'>
